@@ -12,6 +12,7 @@ else{
     let rN = Math.round(Math.random() * Math.max(m , n))
     if(rN % 2 != 0 && rN >= Math.min(m , n)) {
     console.log(rN)
+    }
 }
 
-}
+
