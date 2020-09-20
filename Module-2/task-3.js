@@ -1,6 +1,6 @@
 'use strict'
-let n = 100;
-let m = -5;
+let n = -3;
+let m = -10;
 
 let u = Math.max(n , m)
 let d = Math.min(n , m)
