@@ -7,4 +7,3 @@ for(n ; n >= 0 ; n--){
 	round += p
 }
 console.log(round)
-
