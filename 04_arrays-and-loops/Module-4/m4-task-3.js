@@ -1,3 +1,4 @@
+'use strict'
 let roadMines = [true, true, true, true, true, true, true, true, true, true]
 
 let position

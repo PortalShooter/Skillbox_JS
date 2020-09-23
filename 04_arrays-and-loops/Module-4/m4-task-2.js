@@ -1,3 +1,4 @@
+'use strict'
 let text = 'Привет мир!'
 let n = text.length - 1;
 let round = ''

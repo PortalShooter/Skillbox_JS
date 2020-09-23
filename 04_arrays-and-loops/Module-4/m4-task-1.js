@@ -1,3 +1,4 @@
+'use strict'
 let n = -3;
 let m = -10;
 let count = 40;
