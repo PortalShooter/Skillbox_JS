@@ -14,5 +14,3 @@ function whiteList() {
 }
 whiteList()
 export default { whiteList() }
-
-
