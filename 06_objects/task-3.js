@@ -22,7 +22,8 @@ function makeList(arr){
     let opt = document.createElement('option')
     if(typeof(i) == 'number' || typeof(i) == 'string'){
       opt.text = i;
-    } else if(typeof i === "object"){
+    }
+    else {
       opt.value = i;
       opt.text = i.label;
     }
@@ -37,20 +38,8 @@ function makeList(arr){
       }
     })
   }
-  else if((typeof element === "object")){
-    arr.forEach(element => {
-      let opt = document.createElement('option');
-      opt.value = element.value
-      opt.text = element.label
-
-      select.appendChild(opt)
-    })
-  }
-  return select;
 }
 
 let container = document.querySelector('.container');
 container.append(makeList(arr2));
 container.append(makeList(arr3))
-
-
