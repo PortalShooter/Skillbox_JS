@@ -8,8 +8,8 @@ let fullName = [
 function search(array, key, value){
   for(let obj of array){
     if(obj[key] == value){
-      console.log(obj)
+      return obj
     }
   }
 }
-search(fullName, 'surname', 'Иванов')
+console.log(search(fullName, 'surname', 'Иванов'))
