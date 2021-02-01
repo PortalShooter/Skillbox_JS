@@ -1,15 +1,5 @@
 'use strict'
 
-let array1 = [
-  1,
-  2,
-  'tri',
-  'chetire'
-]
-
-
-
-
 let arr1 = [
   24,
   3,
@@ -26,6 +16,7 @@ let arr2 = {
 
 function makeList(arr, id ){
   let select = document.createElement('select');
+  let a = 0
   check(arr)
   function check(arr){
     if(Array.isArray(arr)){
@@ -33,15 +24,16 @@ function makeList(arr, id ){
         if(typeof element  === 'object'){
           select.appendChild(opt(element.label, element.value, index, id))
         } else select.appendChild(opt(element, element, index, id))
-        console.log(index)
       })
     }
     else if(typeof arr === 'object'){
       for(let value in arr){
         let text = arr[value]
-        select.appendChild(opt(text, value))
+        select.appendChild(opt(text, value, a, id))
+        a++
       }
     } else select.appendChild(opt(arr))
+
   }
 
   return select;
