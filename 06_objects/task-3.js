@@ -1,5 +1,15 @@
 'use strict'
 
+let array1 = [
+  1,
+  2,
+  'tri',
+  'chetire'
+]
+
+
+
+
 let arr1 = [
   24,
   3,
@@ -14,20 +24,19 @@ let arr2 = {
   value3: "Третье значение",
 }
 
-function makeList(arr){
+function makeList(arr, id ){
   let select = document.createElement('select');
   check(arr)
   function check(arr){
     if(Array.isArray(arr)){
-      arr.forEach(element => {
-        if(typeof(element)  === 'object'){
-          select.appendChild(opt(element.label, element))
-
-        } else select.appendChild(opt(element))
-
+      arr.forEach((element, index) => {
+        if(typeof element  === 'object'){
+          select.appendChild(opt(element.label, element.value, index, id))
+        } else select.appendChild(opt(element, element, index, id))
+        console.log(index)
       })
     }
-    else if(typeof(arr) === 'object'){
+    else if(typeof arr === 'object'){
       for(let value in arr){
         let text = arr[value]
         select.appendChild(opt(text, value))
@@ -39,12 +48,16 @@ function makeList(arr){
 }
 
 let container = document.querySelector('.container');
-container.append(makeList(arr2))
+container.append(makeList(arr1, 2))
+container.append(makeList(arr2, 1))
 
-function opt(text, value) {
+function opt(text, value, i, id = 0) {
   let opt = document.createElement('option')
   opt.value = value;
   opt.textContent = text;
+  if( i === id) {
+    opt.selected = true
+  }
   return opt
 }
 
