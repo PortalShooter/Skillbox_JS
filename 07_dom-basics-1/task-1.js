@@ -15,5 +15,5 @@ function oneClick() {
         } else clearInterval(int)
     }
 }
-// let btn = document.querySelector('.btn')
-// btn.addEventListener('click', oneClick)
+let btn = document.querySelector('.btn')
+btn.addEventListener('click', oneClick)

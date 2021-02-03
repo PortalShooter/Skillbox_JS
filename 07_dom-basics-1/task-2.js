@@ -7,16 +7,21 @@ let task2 = document.querySelector('.task-2')
 task2.append(input)
 task2.append(h2)
 
+let timeout = setTimeout(assign, 5000)
 
+function textOutput() {
+  let momentValue = input.value
 
-
-
-let h2js = document.querySelector('.h2js')
-let inputjs = document.querySelector('.inputjs')
-
-function assign() {
-  setTimeout(console.log('timer'), 2000)
+  setInterval(check, 1000)
+  function check() {
+    if(momentValue != input.value){
+      momentValue = input.value;
+      clearTimeout(timeout.timeoutID)
+    }
+  }
 }
-
-let btn = document.querySelector('.btn')
-btn.addEventListener('click', assign)
+function assign() {
+  h2.textContent = input.value;
+  console.log('123')
+}
+textOutput()
