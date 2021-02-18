@@ -1,4 +1,4 @@
-
+let localArray = []
 function createAppTitle(title) {
     let appTitle = document.createElement('h2');
     appTitle.innerHTML = title;
@@ -59,7 +59,7 @@ function createTodoItem(name) {
         deleteButton,
     };
 }
-function createTodoApp(container, title = 'Список дел', todoListInitial) {
+function createTodoApp(container, title = 'Список дел', todoListInitial, localTodo) {
   let todoAppTitle = createAppTitle(title);
   let todoItemForm = createTodoItemForm();
   let todoList = createTodoList();
@@ -87,7 +87,11 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     todoList.append(todoItem.item);
   });
  }
+//  if(localTodo){
+//    localTodo.array.forEach(element => {
 
+//    });
+//  }
 
 
   todoItemForm.input.onkeyup = check
@@ -102,7 +106,7 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
 
       let todoItem = createTodoItem(todoItemForm.input.value);
 
-      createLocalArrayTodo(todoItemForm.input.value)
+      createLocalArrayTodo(todoItemForm.input.value, false)
 
       todoItem.doneButton.addEventListener('click', function() {
         todoItem.item.classList.toggle('list-group-item-success');
@@ -118,12 +122,12 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
       todoItemForm.button.setAttribute('disabled', 'disabled')
   });
 }
-function createLocalArrayTodo(name) {
-  let array = []
+function createLocalArrayTodo(name, done) {
   localStorage.setItem('name', name)
-  array.push(localStorage.getItem('name'))
-  console.log(array)
-  return array
+  localStorage.setItem('done', done)
+  localArray.push({name, done})
+  console.log(localArray)
+  return localArray
 }
 window.createTodoApp = createTodoApp;
 
