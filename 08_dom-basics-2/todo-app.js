@@ -59,7 +59,7 @@ function createTodoItem(name) {
         deleteButton,
     };
 }
-function createTodoApp(container, title = 'Список дел', todoListInitial, localTodo) {
+function createTodoApp(container, title = 'Список дел', todoListInitial, localTodo = localArray) {
   let todoAppTitle = createAppTitle(title);
   let todoItemForm = createTodoItemForm();
   let todoList = createTodoList();
@@ -87,11 +87,26 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     todoList.append(todoItem.item);
   });
  }
-//  if(localTodo){
-//    localTodo.array.forEach(element => {
+ if(localTodo){
+   localTodo.forEach(element => {
 
-//    });
-//  }
+    let todoItem = createTodoItem(element.name);
+    if(element.done){
+      todoItem.item.classList.add('list-group-item-success')
+    }
+
+    todoItem.doneButton.addEventListener('click', function() {
+      todoItem.item.classList.toggle('list-group-item-success');
+    })
+    todoItem.deleteButton.addEventListener('click', function() {
+      if (confirm('Вы уверены?')) {
+          todoItem.item.remove();
+      }
+    })
+    todoList.append(todoItem.item);
+
+   });
+ }
 
 
   todoItemForm.input.onkeyup = check
