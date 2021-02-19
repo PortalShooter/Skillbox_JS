@@ -59,7 +59,7 @@ function createTodoItem(name) {
         deleteButton,
     };
 }
-function createTodoApp(container, title = 'Список дел', todoListInitial, localTodo = localArray) {
+function createTodoApp(container, title = 'Список дел', todoListInitial) {
   let todoAppTitle = createAppTitle(title);
   let todoItemForm = createTodoItemForm();
   let todoList = createTodoList();
@@ -81,14 +81,15 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     })
     todoItem.deleteButton.addEventListener('click', function() {
       if (confirm('Вы уверены?')) {
-          todoItem.item.remove();
+        deleteTodoItem(element.name)
+        todoItem.item.remove();
       }
     })
     todoList.append(todoItem.item);
   });
  }
- if(localTodo){
-   localTodo.forEach(element => {
+ if(localStorage.getItem('name')){
+   unzip().forEach(element => {
 
     let todoItem = createTodoItem(element.name);
     if(element.done){
@@ -100,11 +101,11 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     })
     todoItem.deleteButton.addEventListener('click', function() {
       if (confirm('Вы уверены?')) {
-          todoItem.item.remove();
+        deleteTodoItem(element.title)
+        todoItem.item.remove();
       }
     })
     todoList.append(todoItem.item);
-
    });
  }
 
@@ -128,7 +129,8 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
       })
       todoItem.deleteButton.addEventListener('click', function() {
         if (confirm('Вы уверены?')) {
-            todoItem.item.remove();
+          deleteTodoItem(todoItemForm.input.value)
+          todoItem.item.remove();
         }
       })
 
@@ -138,11 +140,24 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
   });
 }
 function createLocalArrayTodo(name, done) {
-  localStorage.setItem('name', name)
-  localStorage.setItem('done', done)
   localArray.push({name, done})
-  console.log(localArray)
-  return localArray
+  archive()
+  return
+}
+function archive() {
+  let json = JSON.stringify(localArray);
+  localStorage.setItem('name', json);
+}
+function unzip() {
+  let unzip = localStorage.getItem('name');
+  unzip = JSON.parse(unzip);
+  return unzip;
+}
+function deleteTodoItem(itemQuest) {
+  console.log(unzip())
+  let todoItem = unzip().findIndex(item => item.name == itemQuest)
+  localArray.splice(todoItem)
+  archive()
 }
 window.createTodoApp = createTodoApp;
 
