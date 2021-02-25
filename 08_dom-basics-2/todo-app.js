@@ -88,7 +88,7 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     todoList.append(todoItem.item);
   });
  }
- if(localStorage.getItem('name')){
+ if(localStorage.getItem('name') != '[]'){
    unzip().forEach(element => {
 
     let todoItem = createTodoItem(element.name);
