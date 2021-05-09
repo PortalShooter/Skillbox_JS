@@ -35,30 +35,33 @@ function createTodoList() {
     list.classList.add('list-group');
     return list;
 }
+function synchronization(key) {
+  localStorage[key] = localArray
+}
 function createTodoItem(name) {
-    let item = document.createElement('li');
-    let buttonGroup = document.createElement('div');
-    let doneButton = document.createElement('button');
-    let deleteButton = document.createElement('button');
+  let item = document.createElement('li');
+  let buttonGroup = document.createElement('div');
+  let doneButton = document.createElement('button');
+  let deleteButton = document.createElement('button');
 
-    item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-    item.textContent = name;
+  item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+  item.textContent = name;
 
-    buttonGroup.classList.add('btn-group', 'btn-group-sm');
-    doneButton.classList.add('btn', 'btn-success');
-    doneButton.textContent = 'Готово';
-    deleteButton.classList.add('btn', 'btn-danger')
-    deleteButton.textContent = 'Удалить';
+  buttonGroup.classList.add('btn-group', 'btn-group-sm');
+  doneButton.classList.add('btn', 'btn-success');
+  doneButton.textContent = 'Готово';
+  deleteButton.classList.add('btn', 'btn-danger')
+  deleteButton.textContent = 'Удалить';
 
-    buttonGroup.append(doneButton);
-    buttonGroup.append(deleteButton);
-    item.append(buttonGroup);
+  buttonGroup.append(doneButton);
+  buttonGroup.append(deleteButton);
+  item.append(buttonGroup);
 
-    return {
-        item,
-        doneButton,
-        deleteButton,
-    };
+  return {
+      item,
+      doneButton,
+      deleteButton,
+  };
 }
 function createTodoApp(container, title = 'Список дел', todoListInitial) {
   let todoAppTitle = createAppTitle(title);
@@ -68,6 +71,15 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
   container.append(todoAppTitle);
   container.append(todoItemForm.form);
   container.append(todoList);
+
+ // Загрузка данных из локальной памяти ==================================
+ if(localStorage.getItem(title) === null) {
+  localStorage.setItem(title, JSON.stringify(todoListInitial));
+} else {
+  todoListInitial = JSON.parse(localStorage.getItem(title));
+}
+localArray = todoListInitial
+  //=======================================================================
 
  if(todoListInitial){
   todoListInitial.forEach(element => {
@@ -80,82 +92,51 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     todoList.append(todoItem.item);
   });
  }
- // Загрузка данных из локальной памяти =================================
- console.log(localStorage.getItem('name'))
- if(localStorage.getItem('name') != '[]'){
-   unzip().forEach(element => {
-
-    let todoItem = createTodoItem(element.name);
-    if(element.done){
-      todoItem.item.classList.add('list-group-item-success')
-    }
-    btns(todoItem)
-
-    todoList.append(todoItem.item);
-   });
- }
-
-
-//=======================================================================
-
-//Проверка на наличие текста в форме ====================================
+  //Проверка на наличие текста в форме ====================================
   todoItemForm.input.onkeyup = check
   function check() {
     if(!todoItemForm.input.value) {
       todoItemForm.button.setAttribute('disabled', 'disabled')
     } else (todoItemForm.button.removeAttribute('disabled', 'disabled'))
   }
-//=======================================================================
+  //=======================================================================
 
 
   todoItemForm.form.addEventListener('submit', function(e) {
-      e.preventDefault();
+    e.preventDefault();
+    let todoItem = createTodoItem(todoItemForm.input.value);
+    btns(todoItem)
 
-      let todoItem = createTodoItem(todoItemForm.input.value);
+    localArray.push({name: todoItemForm.input.value, done: false})
 
-      createLocalArrayTodo(todoItemForm.input.value, false)
+    todoList.append(todoItem.item);
+    todoItemForm.input.value = '';
+    todoItemForm.button.setAttribute('disabled', 'disabled')
 
-      btns(todoItem)
-
-      todoList.append(todoItem.item);
-      todoItemForm.input.value = '';
-      todoItemForm.button.setAttribute('disabled', 'disabled')
+    synchronization(title)
   });
 
-  function createLocalArrayTodo(name, done) {
-    localArray.push({name, done})
-    archive()
-    return
-  }
-  function archive() {
-    let json = JSON.stringify(localArray);
-    localStorage.setItem('name', json);
-  }
-  function unzip() {
-    let unzip = localStorage.getItem('name');
-    unzip = JSON.parse(unzip);
-    return unzip;
-  }
-  function deleteTodoItem(itemQuest) {
-    console.log(unzip())
-    let todoItem = unzip().findIndex(item => item.name == itemQuest)
-    localArray.splice(todoItem)
-    archive()
-  }
-}
+  // Кнопки "Готово" и "удалить" =============================
+  function btns(todoItem) {
+    todoItem.doneButton.addEventListener('click', function() {
+      todoItem.item.classList.toggle('list-group-item-success');
 
+      localArray.forEach(el => {
+        if(el.name == todoItem.item.firstChild.textContent) el.done?el.done = false: el.done = true;
+      })
+    })
+    todoItem.deleteButton.addEventListener('click', function() {
+      if (confirm('Вы уверены?')) {
+
+        todoItem.item.remove();
+      }
+    })
+  }
+  //==========================================================
+
+  // Синхронизация массива и локальных данных ================
+
+  //===========================================================
+
+}
 window.createTodoApp = createTodoApp;
-
-// Кнопки "Готово" и "удалить" =============================
-function btns(todoItem) {
-  todoItem.doneButton.addEventListener('click', function() {
-    todoItem.item.classList.toggle('list-group-item-success');
-  })
-  todoItem.deleteButton.addEventListener('click', function() {
-    if (confirm('Вы уверены?')) {
-      deleteTodoItem(element.name)
-      todoItem.item.remove();
-    }
-  })
-}
-//==========================================================
