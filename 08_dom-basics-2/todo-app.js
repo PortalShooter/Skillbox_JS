@@ -1,4 +1,5 @@
-let localArray = []
+let localArray = [];
+
 function createAppTitle(title) {
     let appTitle = document.createElement('h2');
     appTitle.innerHTML = title;
@@ -75,19 +76,12 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     if(element.done){
       todoItem.item.classList.add('list-group-item-success')
     }
-
-    todoItem.doneButton.addEventListener('click', function() {
-      todoItem.item.classList.toggle('list-group-item-success');
-    })
-    todoItem.deleteButton.addEventListener('click', function() {
-      if (confirm('Вы уверены?')) {
-        deleteTodoItem(element.name)
-        todoItem.item.remove();
-      }
-    })
+    btns(todoItem)
     todoList.append(todoItem.item);
   });
  }
+ // Загрузка данных из локальной памяти =================================
+ console.log(localStorage.getItem('name'))
  if(localStorage.getItem('name') != '[]'){
    unzip().forEach(element => {
 
@@ -95,27 +89,24 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
     if(element.done){
       todoItem.item.classList.add('list-group-item-success')
     }
+    btns(todoItem)
 
-    todoItem.doneButton.addEventListener('click', function() {
-      todoItem.item.classList.toggle('list-group-item-success');
-    })
-    todoItem.deleteButton.addEventListener('click', function() {
-      if (confirm('Вы уверены?')) {
-        deleteTodoItem(element.title)
-        todoItem.item.remove();
-      }
-    })
     todoList.append(todoItem.item);
    });
  }
 
 
+//=======================================================================
+
+//Проверка на наличие текста в форме ====================================
   todoItemForm.input.onkeyup = check
   function check() {
     if(!todoItemForm.input.value) {
       todoItemForm.button.setAttribute('disabled', 'disabled')
     } else (todoItemForm.button.removeAttribute('disabled', 'disabled'))
   }
+//=======================================================================
+
 
   todoItemForm.form.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -124,41 +115,47 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
 
       createLocalArrayTodo(todoItemForm.input.value, false)
 
-      todoItem.doneButton.addEventListener('click', function() {
-        todoItem.item.classList.toggle('list-group-item-success');
-      })
-      todoItem.deleteButton.addEventListener('click', function() {
-        if (confirm('Вы уверены?')) {
-          deleteTodoItem(todoItemForm.input.value)
-          todoItem.item.remove();
-        }
-      })
+      btns(todoItem)
 
       todoList.append(todoItem.item);
       todoItemForm.input.value = '';
       todoItemForm.button.setAttribute('disabled', 'disabled')
   });
+
+  function createLocalArrayTodo(name, done) {
+    localArray.push({name, done})
+    archive()
+    return
+  }
+  function archive() {
+    let json = JSON.stringify(localArray);
+    localStorage.setItem('name', json);
+  }
+  function unzip() {
+    let unzip = localStorage.getItem('name');
+    unzip = JSON.parse(unzip);
+    return unzip;
+  }
+  function deleteTodoItem(itemQuest) {
+    console.log(unzip())
+    let todoItem = unzip().findIndex(item => item.name == itemQuest)
+    localArray.splice(todoItem)
+    archive()
+  }
 }
-function createLocalArrayTodo(name, done) {
-  localArray.push({name, done})
-  archive()
-  return
-}
-function archive() {
-  let json = JSON.stringify(localArray);
-  localStorage.setItem('name', json);
-}
-function unzip() {
-  let unzip = localStorage.getItem('name');
-  unzip = JSON.parse(unzip);
-  return unzip;
-}
-function deleteTodoItem(itemQuest) {
-  console.log(unzip())
-  let todoItem = unzip().findIndex(item => item.name == itemQuest)
-  localArray.splice(todoItem)
-  archive()
-}
+
 window.createTodoApp = createTodoApp;
 
-
+// Кнопки "Готово" и "удалить" =============================
+function btns(todoItem) {
+  todoItem.doneButton.addEventListener('click', function() {
+    todoItem.item.classList.toggle('list-group-item-success');
+  })
+  todoItem.deleteButton.addEventListener('click', function() {
+    if (confirm('Вы уверены?')) {
+      deleteTodoItem(element.name)
+      todoItem.item.remove();
+    }
+  })
+}
+//==========================================================
