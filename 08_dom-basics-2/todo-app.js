@@ -36,7 +36,7 @@ function createTodoList() {
     return list;
 }
 function synchronization(key) {
-  localStorage.getItem(key) = JSON.stringify(localArray)
+  localStorage.setItem(key, JSON.stringify(localArray))
 }
 function createTodoItem(name) {
   let item = document.createElement('li');
@@ -76,7 +76,7 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
  if(localStorage.getItem(title) === null) {
   localStorage.setItem(title, JSON.stringify(todoListInitial));
 } else {
-  // todoListInitial = JSON.parse(localStorage.getItem(title));
+  todoListInitial = JSON.parse(localStorage.getItem(title));
 }
 localArray = todoListInitial
   //=======================================================================
@@ -120,16 +120,17 @@ localArray = todoListInitial
   function btns(todoItem) {
     todoItem.doneButton.addEventListener('click', function() {
       todoItem.item.classList.toggle('list-group-item-success');
-
       localArray.forEach(el => {
         if(el.name == todoItem.item.firstChild.textContent) el.done?el.done = false: el.done = true;
       })
+      synchronization(title)
     })
     todoItem.deleteButton.addEventListener('click', function() {
       if (confirm('Вы уверены?')) {
 
         todoItem.item.remove();
       }
+      synchronization(title)
     })
   }
   //==========================================================
