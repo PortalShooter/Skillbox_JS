@@ -39,8 +39,7 @@ function createTodoList() {
  function synchronization(key) {
   localStorage.setItem(key, JSON.stringify(localArray))
 }
-//===========================================================
-
+//==========================================================
 function createTodoItem(name) {
   let item = document.createElement('li');
   let buttonGroup = document.createElement('div');
@@ -110,7 +109,16 @@ localArray = todoListInitial
     let todoItem = createTodoItem(todoItemForm.input.value);
     btns(todoItem)
 
-    localArray.push({name: todoItemForm.input.value, done: false})
+    nextIndex:for(let index = 1; index <= localArray.length + 1; ++index){
+      for(let n of localArray) {
+        if(n.index == index) continue nextIndex
+      }
+      console.log(todoItem)
+      todoItem.item.setAttribute('index', index)
+      break
+    }
+
+    localArray.push({name: todoItemForm.input.value, done: false, index: todoItem.index})
 
     todoList.append(todoItem.item);
     todoItemForm.input.value = '';
@@ -123,6 +131,7 @@ localArray = todoListInitial
   function btns(todoItem) {
     todoItem.doneButton.addEventListener('click', function() {
       todoItem.item.classList.toggle('list-group-item-success');
+      console.log(localArray)
       localArray.forEach(el => {
         if(el.name == todoItem.item.firstChild.textContent) el.done?el.done = false: el.done = true;
       })
@@ -132,7 +141,6 @@ localArray = todoListInitial
       if (confirm('Вы уверены?')) {
         for(let key in localArray){
           if(localArray[key].name == todoItem.item.firstChild.textContent) localArray.splice(key,1)
-
         }
         todoItem.item.remove();
       }
@@ -140,8 +148,5 @@ localArray = todoListInitial
     })
   }
   //==========================================================
-
-
-
 }
 window.createTodoApp = createTodoApp;
