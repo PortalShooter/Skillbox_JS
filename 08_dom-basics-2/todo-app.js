@@ -36,7 +36,7 @@ function createTodoList() {
     return list;
 }
 function synchronization(key) {
-  localStorage[key] = localArray
+  localStorage.getItem(key) = JSON.stringify(localArray)
 }
 function createTodoItem(name) {
   let item = document.createElement('li');
@@ -76,7 +76,7 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
  if(localStorage.getItem(title) === null) {
   localStorage.setItem(title, JSON.stringify(todoListInitial));
 } else {
-  todoListInitial = JSON.parse(localStorage.getItem(title));
+  // todoListInitial = JSON.parse(localStorage.getItem(title));
 }
 localArray = todoListInitial
   //=======================================================================
