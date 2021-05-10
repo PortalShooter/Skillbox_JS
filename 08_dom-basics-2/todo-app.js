@@ -35,9 +35,12 @@ function createTodoList() {
     list.classList.add('list-group');
     return list;
 }
-function synchronization(key) {
+// Синхронизация массива и локальных данных ================
+ function synchronization(key) {
   localStorage.setItem(key, JSON.stringify(localArray))
 }
+//===========================================================
+
 function createTodoItem(name) {
   let item = document.createElement('li');
   let buttonGroup = document.createElement('div');
@@ -127,7 +130,10 @@ localArray = todoListInitial
     })
     todoItem.deleteButton.addEventListener('click', function() {
       if (confirm('Вы уверены?')) {
+        for(let key in localArray){
+          if(localArray[key].name == todoItem.item.firstChild.textContent) localArray.splice(key,1)
 
+        }
         todoItem.item.remove();
       }
       synchronization(title)
@@ -135,9 +141,7 @@ localArray = todoListInitial
   }
   //==========================================================
 
-  // Синхронизация массива и локальных данных ================
 
-  //===========================================================
 
 }
 window.createTodoApp = createTodoApp;
