@@ -109,13 +109,20 @@ localArray = todoListInitial
     let todoItem = createTodoItem(todoItemForm.input.value);
     btns(todoItem)
 
-    nextIndex:for(let index = 1; index <= localArray.length + 1; ++index){
-      for(let n of localArray) {
-        if(n.index == index) continue nextIndex
-      }
-      console.log(todoItem)
-      todoItem.item.setAttribute('index', index)
-      break
+    // nextIndex:for(let index = 1; index <= localArray.length + 1; ++index){
+    //   for(let n of localArray) {
+    //     if(n.index == index) continue nextIndex
+    //   }
+    //   console.log(todoItem)
+    //   todoItem.item.setAttribute('index', index)
+    //   break
+    // }
+
+    for (let i = 0; i < localArray.length; i++ ){
+
+      let element = localArray[i];
+
+      console.log(element.item);
     }
 
     localArray.push({name: todoItemForm.input.value, done: false, index: todoItem.index})
