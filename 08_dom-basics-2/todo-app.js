@@ -55,6 +55,15 @@ function createTodoItem(name) {
   deleteButton.classList.add('btn', 'btn-danger')
   deleteButton.textContent = 'Удалить';
 
+  nextIndex:for(let index = 1; index <= localArray.length + 1; ++index){
+    for(let n of localArray) {
+      if(n.index == index) continue nextIndex
+    }
+    item.setAttribute('index', index)
+
+    break
+  }
+
   buttonGroup.append(doneButton);
   buttonGroup.append(deleteButton);
   item.append(buttonGroup);
@@ -83,13 +92,15 @@ function createTodoApp(container, title = 'Список дел', todoListInitial
 localArray = todoListInitial
   //=======================================================================
 
- if(todoListInitial){
-  todoListInitial.forEach(element => {
+ if(localArray){
+  localArray.forEach(element => {
 
     let todoItem = createTodoItem(element.name);
     if(element.done){
       todoItem.item.classList.add('list-group-item-success')
     }
+
+    element.index = todoItem.item.getAttribute('index')
     btns(todoItem)
     todoList.append(todoItem.item);
   });
@@ -109,23 +120,15 @@ localArray = todoListInitial
     let todoItem = createTodoItem(todoItemForm.input.value);
     btns(todoItem)
 
-    // nextIndex:for(let index = 1; index <= localArray.length + 1; ++index){
-    //   for(let n of localArray) {
-    //     if(n.index == index) continue nextIndex
-    //   }
-    //   console.log(todoItem)
-    //   todoItem.item.setAttribute('index', index)
-    //   break
-    // }
-
-    for (let i = 0; i < localArray.length; i++ ){
-
-      let element = localArray[i];
-
-      console.log(element.item);
+    nextIndex:for(let index = 1; index <= localArray.length + 1; ++index){
+      for(let n of localArray) {
+        if(n.index == index) continue nextIndex
+      }
+      todoItem.item.setAttribute('index', index);
+      break
     }
 
-    localArray.push({name: todoItemForm.input.value, done: false, index: todoItem.index})
+    localArray.push({name: todoItemForm.input.value, done: false, index: todoItem.item.getAttribute('index')})
 
     todoList.append(todoItem.item);
     todoItemForm.input.value = '';
@@ -138,16 +141,15 @@ localArray = todoListInitial
   function btns(todoItem) {
     todoItem.doneButton.addEventListener('click', function() {
       todoItem.item.classList.toggle('list-group-item-success');
-      console.log(localArray)
       localArray.forEach(el => {
-        if(el.name == todoItem.item.firstChild.textContent) el.done?el.done = false: el.done = true;
+        if(el.index == todoItem.item.getAttribute('index')) el.done?el.done = false: el.done = true;
       })
       synchronization(title)
     })
     todoItem.deleteButton.addEventListener('click', function() {
       if (confirm('Вы уверены?')) {
         for(let key in localArray){
-          if(localArray[key].name == todoItem.item.firstChild.textContent) localArray.splice(key,1)
+          if(localArray[key].index == todoItem.item.getAttribute('index')) localArray.splice(key,1)
         }
         todoItem.item.remove();
       }
