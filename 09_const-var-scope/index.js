@@ -1,0 +1,79 @@
+'use strict'
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+function createBoard() {
+  const board =  document.createElement('div');
+  board.classList.add('board')
+  document.body.append(board)
+  return board
+}
+function createCard(name, board, cache) {
+  const card = document.createElement('button');
+  card.classList.add('card');
+
+  const cardContent = document.createElement('div')
+  cardContent.textContent = name;
+  cardContent.classList.add('cardContent');
+
+  card.append(cardContent)
+  board.append(card)
+
+  card.addEventListener('click', () => {
+    cardContent.classList.add('is-open')
+    cache(card)
+  })
+
+}
+function steamCheck() {
+  let arr = [];
+  return function(card) {
+    arr.push(card)
+    if(arr.length == 2 && arr[0].firstChild.textContent == arr[1].firstChild.textContent) {
+      arr[0].setAttribute('disabled', 'disabled')
+      arr[1].setAttribute('disabled', 'disabled')
+      arr = []
+    }
+    if(arr.length == 3) {
+      arr[0].firstChild.classList.remove('is-open')
+      arr[1].firstChild.classList.remove('is-open')
+      arr.shift()
+      arr.shift()
+    }
+    return console.log(arr)
+  }
+}
+
+const row = +prompt('Введите число строк от 0 до 10', 4);
+const column = +prompt('Введите число столбцов от 0 до 10', 4);
+
+let cards = [];
+let sum = row * column;
+
+for(let i = 0; i < sum/2; i++){
+  cards.push(i)
+  cards.push(i)
+}
+
+const button = document.createElement('button');
+button.textContent = 'Начать игру'
+document.body.append(button)
+button.addEventListener('click', () => {
+  if(document.querySelector('.board')) {document.querySelector('.board').remove()}
+  const board = createBoard()
+  let cache = steamCheck()
+
+  shuffle(cards)
+  for(let i in cards){
+    createCard(cards[i], board, cache)
+  }
+  button.textContent = 'Сыграть ещё раз'
+})
+
+
+
+
+
