@@ -17,7 +17,7 @@ function createBoard() {
 
   return board
 }
-function createCard(name, board, cache) {
+function createCard(name, board, cache, time) {
   const card = document.createElement('button');
   card.classList.add('card');
 
@@ -30,13 +30,14 @@ function createCard(name, board, cache) {
 
   card.addEventListener('click', () => {
     cardContent.classList.add('is-open')
-    cache(card)
+    cache(card, time)
   })
 
 }
 function steamCheck() {
   let arr = [];
-  return function(card) {
+  let n = 0;
+  return function(card, time) {
     arr.push(card)
     if(arr.length == 2 && arr[0].firstChild.textContent == arr[1].firstChild.textContent) {
       arr[0].setAttribute('disabled', 'disabled')
@@ -44,12 +45,17 @@ function steamCheck() {
       arr[0].classList.add('card-active')
       arr[1].classList.add('card-active')
       arr = []
+      n += 2;
     }
     if(arr.length == 3) {
       arr[0].firstChild.classList.remove('is-open')
       arr[1].firstChild.classList.remove('is-open')
       arr.shift()
       arr.shift()
+    }
+    if(n == sum){
+      clearInterval(time)
+      alert('Поздравляю, вы выиграли');
     }
   }
 }
@@ -74,11 +80,10 @@ document.body.append(button)
 button.addEventListener('click', () => {
   if(document.querySelector('.board')) {document.querySelector('.board').remove()}
   const board = createBoard()
-  let cache = steamCheck()
 
   shuffle(cards)
 
-  timer.textContent = 2;
+  timer.textContent = 30;
   let time = setInterval(() => {
     timer.textContent--
     if(timer.textContent == 0) {
@@ -91,6 +96,8 @@ button.addEventListener('click', () => {
     }
   }, 1000);
 
+  let cache = steamCheck(time)
+
   const rows = document.querySelectorAll('.row')
   let rowNumber = 0;
   let n = column
@@ -98,7 +105,7 @@ button.addEventListener('click', () => {
     addCardsInRow()
     function addCardsInRow() {
       if(i < n){
-        createCard(cards[i], rows[rowNumber], cache)
+        createCard(cards[i], rows[rowNumber], cache, time)
       } else {
         rowNumber++
         n += column
