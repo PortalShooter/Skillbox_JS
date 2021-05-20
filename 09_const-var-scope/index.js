@@ -41,6 +41,8 @@ function steamCheck() {
     if(arr.length == 2 && arr[0].firstChild.textContent == arr[1].firstChild.textContent) {
       arr[0].setAttribute('disabled', 'disabled')
       arr[1].setAttribute('disabled', 'disabled')
+      arr[0].classList.add('card-active')
+      arr[1].classList.add('card-active')
       arr = []
     }
     if(arr.length == 3) {
@@ -62,6 +64,9 @@ for(let i = 0; i < sum/2; i++) {
   cards.push(i)
   cards.push(i)
 }
+let timer = document.createElement('div')
+timer.classList.add('timer')
+document.body.append(timer)
 
 const button = document.createElement('button');
 button.textContent = 'Начать игру'
@@ -72,6 +77,20 @@ button.addEventListener('click', () => {
   let cache = steamCheck()
 
   shuffle(cards)
+
+  timer.textContent = 2;
+  let time = setInterval(() => {
+    timer.textContent--
+    if(timer.textContent == 0) {
+      clearInterval(time)
+      const cards = document.querySelectorAll('.card')
+      for(let i in cards) {
+        cards[i].setAttribute('disabled', 'disabled')
+        cards[i].classList.add('lose')
+      }
+    }
+  }, 1000);
+
   const rows = document.querySelectorAll('.row')
   let rowNumber = 0;
   let n = column
@@ -87,10 +106,6 @@ button.addEventListener('click', () => {
       }
     }
   }
-
-  // for(let i in cards) {
-  //   createCard(cards[i], board, cache)
-  // }
   button.textContent = 'Сыграть ещё раз'
 })
 
