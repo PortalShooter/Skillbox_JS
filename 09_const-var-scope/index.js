@@ -40,8 +40,8 @@ function steamCheck() {
   return function(card, time) {
     arr.push(card)
     arr[0].setAttribute('disabled', 'disabled')
+    arr[1].setAttribute('disabled', 'disabled')
     if(arr.length == 2 && arr[0].firstChild.textContent == arr[1].firstChild.textContent) {
-      arr[1].setAttribute('disabled', 'disabled')
       arr[0].classList.add('card-active')
       arr[1].classList.add('card-active')
       arr = []
@@ -49,6 +49,7 @@ function steamCheck() {
     }
     if(arr.length == 3) {
       arr[0].removeAttribute('disabled', 'disabled')
+      arr[1].removeAttribute('disabled', 'disabled')
       arr[0].firstChild.classList.remove('is-open')
       arr[1].firstChild.classList.remove('is-open')
       arr.shift()
