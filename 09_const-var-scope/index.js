@@ -43,7 +43,6 @@ function steamCheck() {
       arr.shift()
       arr.shift()
     }
-    return console.log(arr)
   }
 }
 
@@ -72,7 +71,6 @@ button.addEventListener('click', () => {
   }
   button.textContent = 'Сыграть ещё раз'
 })
-
 
 
 
