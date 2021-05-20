@@ -9,6 +9,12 @@ function createBoard() {
   const board =  document.createElement('div');
   board.classList.add('board')
   document.body.append(board)
+  for(let i = 0; i < row; i++) {
+    const row = document.createElement('div')
+    row.classList.add('row')
+    board.append(row)
+  }
+
   return board
 }
 function createCard(name, board, cache) {
@@ -52,7 +58,7 @@ const column = +prompt('Введите число столбцов от 0 до 1
 let cards = [];
 let sum = row * column;
 
-for(let i = 0; i < sum/2; i++){
+for(let i = 0; i < sum/2; i++) {
   cards.push(i)
   cards.push(i)
 }
@@ -66,9 +72,25 @@ button.addEventListener('click', () => {
   let cache = steamCheck()
 
   shuffle(cards)
-  for(let i in cards){
-    createCard(cards[i], board, cache)
+  const rows = document.querySelectorAll('.row')
+  let rowNumber = 0;
+  let n = column
+  for(let i in cards) {
+    addCardsInRow()
+    function addCardsInRow() {
+      if(i < n){
+        createCard(cards[i], rows[rowNumber], cache)
+      } else {
+        rowNumber++
+        n += column
+        return addCardsInRow()
+      }
+    }
   }
+
+  // for(let i in cards) {
+  //   createCard(cards[i], board, cache)
+  // }
   button.textContent = 'Сыграть ещё раз'
 })
 
