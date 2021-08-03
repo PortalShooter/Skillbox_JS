@@ -48,6 +48,13 @@ function createTable() {
   document.body.append(table)
   createTitle()
   createRow()
+  students.forEach(student => {
+    createRow(student)
+  })
+
+
+  // el.name, el.surname, el.patronymic, el.dob, el.dateOfLearning, el.faculty
+
 
   function createTitle() {
     const title = document.createElement('caption')
@@ -55,24 +62,28 @@ function createTable() {
     table.append(title)
   }
 
-  function createRow() {
+  function createRow(student) {
     const row = document.createElement('tr')
     table.append(row)
-    createColumn(row)
+    createColumn(student)
 
-    function createColumn() {
-      for(let i = 0; i < 4; i++) {
-        const column = document.createElement('td')
-        column.textContent = 
+    function createColumn(row, student) {
+      for (let i = 0; i < 4; i++) {
+        let column
+        const header = ['ФИО студента', 'Факультет', 'Дата рождения', 'Годы обучения']
+        if (!student) {
+          console.log(student);
+          column = document.createElement('th')
+          column.textContent = header[i]
+        }
+        else {
+
+          column = document.createElement('td')
+        }
         row.append(column)
       }
     }
   }
-  
-
 }
 
 createTable()
-
-
-
