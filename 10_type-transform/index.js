@@ -71,7 +71,9 @@ function createTable() {
         const header = ['ФИО студента', 'Факультет', 'Дата рождения', 'Годы обучения']
         if(student === 'search') {
           column = document.createElement('th')
-          column.append(document.createElement('input'))
+          const inputSearch = document.createElement('input')
+          inputSearch.classList.add('input-search')
+          column.append(inputSearch)
         } else if (student === 'header') {
           column = document.createElement('th')
           column.classList.add('header-column')
@@ -95,8 +97,11 @@ function createTable() {
 createTable()
 
 const headerColumn = document.querySelectorAll('.header-column')
-headerColumn.forEach(el => {
+headerColumn.forEach((el,index) => {
   el.addEventListener('click', () => {
-    console.log(123);
+
   })
 })
+
+const inputsSearch = document.querySelectorAll('.input-search')
+
