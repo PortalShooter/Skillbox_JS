@@ -42,14 +42,14 @@ let students = [
   },
 ];
 
-function createTable() {
+function createTable(data) {
   const table = document.createElement('table')
   table.classList.add('table')
-  document.body.append(table)
+  document.querySelector('.table').append(table)
   createTitle()
   createRow('search')
   createRow('header')
-  students.forEach(student => {
+  data.forEach(student => {
     createRow(student)
   })
 
@@ -86,30 +86,91 @@ function createTable() {
           column = document.createElement('td')
           if (i === 0) column.textContent = `${student.surname} ${student.name} ${student.patronymic}`
           else if (i === 1) column.textContent = `${student.faculty}`
-          else if (i === 2) column.textContent = `${student.dob.getDate()}.${student.dob.getMonth() + 1}.${student.dob.getFullYear()} ${new Date().getFullYear() - student.dob.getFullYear()}`
+          else if (i === 2) column.textContent = `${student.dob.getDate()}.${student.dob.getMonth() + 1}.${student.dob.getFullYear()} (${new Date().getFullYear() - student.dob.getFullYear()})`
           else if (i === 3) column.textContent = `${student.dateOfLearning}-${student.dateOfLearning + 4} (${startYears})`
         }
         row.append(column)
       }
     }
   }
+  sortTable()
+}
+createTable(students)
+
+function sortTable() {
+  const headerColumn = document.querySelectorAll('.header-column')
+  headerColumn.forEach((cell, indexCell) => {
+    cell.addEventListener('click', () => {
+      if (indexCell === 0) {
+        students.sort(function (a, b) {
+          let nameA = (a.surname + a.name + a.patronymic).toLowerCase(),
+            nameB = (b.surname + b.name + b.patronymic).toLowerCase()
+          if (nameA < nameB) //сортируем строки по возрастанию
+            return -1
+          if (nameA > nameB)
+            return 1
+          return 0 // Никакой сортировки
+        })
+      }
+      if (indexCell === 1) {
+        students.sort(function (a, b) {
+          let nameA = a.faculty.toLowerCase(),
+            nameB = b.faculty.toLowerCase()
+          if (nameA < nameB) //сортируем строки по возрастанию
+            return -1
+          if (nameA > nameB)
+            return 1
+          return 0 // Никакой сортировки
+        })
+      }
+      if (indexCell === 2) {
+        students.sort(function (a, b) {
+          var dateA = new Date(a.dob), dateB = new Date(b.dob)
+          return dateA - dateB //сортировка по возрастающей дате
+        })
+      }
+      if (indexCell === 3) {
+        students.sort(function (a, b) {
+          var dateA = new Date(a.dateOfLearning), dateB = new Date(b.dateOfLearning)
+          return dateA - dateB //сортировка по возрастающей дате
+        })
+      }
+      document.querySelector('.table').textContent = ''
+      createTable(students)
+
+      document.querySelectorAll('.row').forEach((row, indexRow) => {
+        if (indexRow > 1) {
+        }
+      })
+
+    })
+  })
 }
 
-createTable()
+document.querySelector('button').addEventListener('click', () => {
+  const inputName = document.querySelector('.input-name').value
+  const inputSurname = document.querySelector('.input-surname').value
+  const inputPatronymic = document.querySelector('.input-patronymic').value
+  const inputFaculty = document.querySelector('.faculty').value
+  const inputDob = document.querySelector('.dob').value
+  const inputDateOfLearning = +document.querySelector('.dateOfLearning').value
 
-const headerColumn = document.querySelectorAll('.header-column')
-headerColumn.forEach((cell, indexCell) => {
-  const sort = []
-  cell.addEventListener('click', () => {
-    document.querySelectorAll('.row').forEach((row, indexRow) => {
-      if (indexRow > 1) {
-        sort.push(row.childNodes[indexCell].textContent)
-        console.log(row.childNodes[indexCell]);
-      }
-    })
-    sort.sort()
+  students.push({
+    name: inputName,
+    surname: inputSurname,
+    patronymic: inputPatronymic,
+    dob: new Date(inputDob),
+    dateOfLearning: inputDateOfLearning,
+    faculty: inputFaculty,
   })
+
+  document.querySelector('.table').textContent = ''
+  createTable(students)
 })
 
 const inputsSearch = document.querySelectorAll('.input-search')
-
+inputsSearch.forEach(el => {
+  el.oninput = () => {
+    console.log(123);
+  }
+})
