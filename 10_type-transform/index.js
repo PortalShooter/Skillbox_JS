@@ -62,6 +62,7 @@ function createTable() {
 
   function createRow(student) {
     const row = document.createElement('tr')
+    row.classList.add('row')
     table.append(row)
     createColumn(row, student)
 
@@ -69,7 +70,7 @@ function createTable() {
       for (let i = 0; i < 4; i++) {
         let column
         const header = ['ФИО студента', 'Факультет', 'Дата рождения', 'Годы обучения']
-        if(student === 'search') {
+        if (student === 'search') {
           column = document.createElement('th')
           const inputSearch = document.createElement('input')
           inputSearch.classList.add('input-search')
@@ -80,13 +81,13 @@ function createTable() {
           column.textContent = header[i]
         }
         else {
-          let startYears =  new Date().getFullYear() - student.dateOfLearning
-          if(startYears > 4 || startYears == 4 && new Date().getMonth() > 8) startYears = 'Закончил'
+          let startYears = new Date().getFullYear() - student.dateOfLearning
+          if (startYears > 4 || startYears == 4 && new Date().getMonth() > 8) startYears = 'Закончил'
           column = document.createElement('td')
-          if(i === 0) column.textContent = `${student.surname} ${student.name} ${student.patronymic}`
-          else if(i === 1) column.textContent = `${student.faculty}`
-          else if(i === 2) column.textContent = `${student.dob.getDate()}.${student.dob.getMonth() + 1}.${student.dob.getFullYear()} ${new Date().getFullYear() - student.dob.getFullYear()}`
-          else if(i === 3) column.textContent = `${student.dateOfLearning}-${student.dateOfLearning + 4} (${startYears})`
+          if (i === 0) column.textContent = `${student.surname} ${student.name} ${student.patronymic}`
+          else if (i === 1) column.textContent = `${student.faculty}`
+          else if (i === 2) column.textContent = `${student.dob.getDate()}.${student.dob.getMonth() + 1}.${student.dob.getFullYear()} ${new Date().getFullYear() - student.dob.getFullYear()}`
+          else if (i === 3) column.textContent = `${student.dateOfLearning}-${student.dateOfLearning + 4} (${startYears})`
         }
         row.append(column)
       }
@@ -97,9 +98,16 @@ function createTable() {
 createTable()
 
 const headerColumn = document.querySelectorAll('.header-column')
-headerColumn.forEach((el,index) => {
-  el.addEventListener('click', () => {
-
+headerColumn.forEach((cell, indexCell) => {
+  const sort = []
+  cell.addEventListener('click', () => {
+    document.querySelectorAll('.row').forEach((row, indexRow) => {
+      if (indexRow > 1) {
+        sort.push(row.childNodes[indexCell].textContent)
+        console.log(row.childNodes[indexCell]);
+      }
+    })
+    sort.sort()
   })
 })
 
