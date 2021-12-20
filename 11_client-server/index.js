@@ -1,9 +1,10 @@
+getData()
+
 async function getData (page = 1) {
   const response = await fetch(`https://gorest.co.in/public-api/posts?page=${page}`)
   const data = await response.json()
   creatArticles(data)
 }
-getData()
 async function creatArticles(data) {
   console.log(data);
   const body = document.querySelector('.container')
@@ -15,7 +16,7 @@ async function creatArticles(data) {
   data.data.forEach(el => {
     articlesList.insertAdjacentHTML('beforeEnd',
       `<li class="list-group-item">
-                <a href="https://gorest.co.in/public-api/posts?page=${el.id}">${el.title}</a>
+                <a href="details.html?page=${el.id}">${el.title}</a>
             </li>`
     );
   })
