@@ -1,6 +1,11 @@
 getData()
+async function getData () {
 
-async function getData (page = 1) {
+  let params = new URLSearchParams(document.location.search);
+  let page = params.get("page");
+  if (!page) {
+    page = 1
+  }
   const response = await fetch(`https://gorest.co.in/public-api/posts?page=${page}`)
   const data = await response.json()
   creatArticles(data)
@@ -8,7 +13,6 @@ async function getData (page = 1) {
 async function creatArticles(data) {
   console.log(data);
   const body = document.querySelector('.container')
-  body.innerHTML = '<h1 class="display-3 pb-2">Список статей</h1>'
 
   const articlesList = document.createElement('ul')
   articlesList.classList.add('list-group')
@@ -33,9 +37,8 @@ async function creatArticles(data) {
   const activePages = data.meta.pagination.page
 
   for (let i = activePages - 5 < 0 ? 1 : activePages - 5; i <= (activePages + 5 > numberPages ? numberPages : activePages + 5); i++) {
-
     paginationList.insertAdjacentHTML('beforeEnd',
-      `<li class="page-item ${activePages === i && 'active'}"><button class="page-link" onclick="getData(${i})">${i}</button></li>`
+      `<li class="page-item ${activePages === i && 'active'}"><a class="page-link" href="index.html?page=${i}">${i}</a></li>`
     );
   }
 }
