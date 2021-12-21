@@ -1,6 +1,5 @@
 getData()
 async function getData () {
-
   let params = new URLSearchParams(document.location.search);
   let page = params.get("page");
   if (!page) {
@@ -11,7 +10,6 @@ async function getData () {
   creatArticles(data)
 }
 async function creatArticles(data) {
-  console.log(data);
   const body = document.querySelector('.container')
 
   const articlesList = document.createElement('ul')

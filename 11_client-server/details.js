@@ -4,8 +4,7 @@ async function getDetailData() {
   const id = window.location.search.slice(6)
   const response = await fetch(`https://gorest.co.in/public-api/posts/${id}`)
   const data = await response.json()
-  const comments = await getComments(data.id)
-  console.log('comments', comments);
+  const comments = await getComments(data.data.id)
   createPage(data.data, comments)
 }
 
@@ -26,32 +25,28 @@ function createPage(data, comments) {
   body.append(p)
 
   const commentsTitle = document.createElement('h2')
-  commentsTitle.textContent = 'Комментарии';
+  commentsTitle.textContent = 'Комментарии: ' + comments.data.length;
   body.append(commentsTitle)
 
   const commentsList = document.createElement('ul')
-  commentsList.classList.add('pagination')
+  commentsList.classList.add('list-group')
   body.append(commentsList)
-
 
   comments.data.forEach((item) => {
     commentsList.insertAdjacentHTML('beforeEnd',
-    `<li class="page-item">
-           <p class="comment__name">
+    `<li class="list-group-item p-3">
+           <div class="comment__name">
                 Имя: ${item.name}
-           </p>
-           <p class="comment__email">
+           </div>
+           <div class="comment__email">
                 Email: ${item.email}
-           </p>
-           <p class="comment__body">
+           </div>
+           <p class="p-2 pb-0 mb-0">
                 ${item.body}
            </p>
         </li>`
     );
   })
-
-
-
 }
 
 
